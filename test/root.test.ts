@@ -6,7 +6,8 @@ g.columns = 80
 import Help from '../src'
 
 const VERSION = require('../package.json').version
-const UA = `@oclif/plugin-help/${VERSION} ${process.platform}-${process.arch} node-${process.version}`
+const NAME = require('../package.json').name
+const UA = `${NAME}/${VERSION} ${process.platform}-${process.arch} node-${process.version}`
 
 const test = base
 .loadConfig()

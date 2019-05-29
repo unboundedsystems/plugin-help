@@ -1,7 +1,8 @@
 import {expect, test} from '@oclif/test'
 
 const VERSION = require('../../package.json').version
-const UA = `@oclif/plugin-help/${VERSION} ${process.platform}-${process.arch} node-${process.version}`
+const NAME = require('../../package.json').name
+const UA = `${NAME}/${VERSION} ${process.platform}-${process.arch} node-${process.version}`
 
 describe('help command', () => {
   test

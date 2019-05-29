@@ -1,5 +1,5 @@
 {
-  "name": "@oclif/plugin-help",
+  "name": "@unboundedsystems/plugin-help",
   "description": "standard help for oclif",
   "version": "2.1.6",
   "author": "Jeff Dickey @jdxcode",

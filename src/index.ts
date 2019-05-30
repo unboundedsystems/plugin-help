@@ -21,13 +21,19 @@ export interface HelpOptions {
   stripAnsi?: boolean
 }
 
+export interface HelpConfig {
+  showAliases?: string[]
+}
+
 export default class Help {
+  hConfig: HelpConfig
   opts: HelpOptions
   render: (input: string) => string
 
   constructor(public config: Config.IConfig, opts: Partial<HelpOptions> = {}) {
     this.opts = {maxWidth: stdtermwidth, ...opts}
     this.render = template(this)
+    this.hConfig = (this.config.pjson.oclif as any).help || {}
   }
 
   showHelp(argv: string[]) {
@@ -43,7 +49,7 @@ export default class Help {
         return arg
       }
     }
-    let topics = this.config.topics
+    let topics = this.config.topics.concat(this.aliasTopics)
     topics = topics.filter(t => this.opts.all || !t.hidden)
     topics = sortBy(topics, t => t.name)
     topics = uniqBy(topics, t => t.name)
@@ -72,6 +78,18 @@ export default class Help {
     } else {
       error(`command ${subject} not found`)
     }
+  }
+
+  get aliasTopics(): Config.Topic[] {
+    if (!this.hConfig.showAliases) return []
+    return compact(this.hConfig.showAliases.map(a => {
+      const cmd = this.config.findCommand(a)
+      if (cmd) return {
+        name: a,
+        description: cmd.description
+        //hidden: false - since they're explicitly listed, they're never hidden
+      }
+    }))
   }
 
   showCommandHelp(command: Config.Command, topics: Config.Topic[]) {
